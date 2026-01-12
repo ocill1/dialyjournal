@@ -297,29 +297,37 @@ include "koneksi.php";
         <h1 class="fw-bold display-4 pb-3">gallery</h1>
         <div id="carouselExample" class="carousel slide">
           <div class="carousel-inner">
+            <?php
+            $sql_gallery = "SELECT * FROM gallery ORDER BY tanggal DESC";
+            $hasil_gallery = $conn->query($sql_gallery);
+            $first = true;
+            
+            if ($hasil_gallery->num_rows > 0) {
+              while($row_gallery = $hasil_gallery->fetch_assoc()) {
+                $active_class = $first ? "active" : "";
+                $first = false;
+            ?>
+            <div class="carousel-item <?= $active_class ?>">
+              <img src="img/<?= $row_gallery["gambar"] ?>" class="d-block w-100" alt="<?= $row_gallery["judul"] ?>" />
+              <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+                <h5><?= $row_gallery["judul"] ?></h5>
+                <p><?= $row_gallery["deskripsi"] ?></p>
+              </div>
+            </div>
+            <?php
+              }
+            } else {
+            ?>
             <div class="carousel-item active">
-              <img src="img/mumet.jpg" class="d-block w-100" alt="..." />
+              <img src="img/mumet.jpg" class="d-block w-100" alt="Default Gallery" />
+              <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+                <h5>Gallery Kosong</h5>
+                <p>Belum ada gambar di gallery</p>
+              </div>
             </div>
-            <div class="carousel-item">
-              <img src="img/mumet_part2.jpg" class="d-block w-100" alt="..." />
-            </div>
-            <div class="carousel-item">
-              <img src="img/pov_fixEoror.jpg" class="d-block w-100" alt="..." />
-            </div>
-            <div class="carousel-item">
-              <img
-                src="img/muka_serius_skill_misterius.jpg"
-                class="d-block w-100"
-                alt="..."
-              />
-            </div>
-            <div class="carousel-item">
-              <img
-                src="img/kebanyakan_tugas.jpg"
-                class="d-block w-100"
-                alt="..."
-              />
-            </div>
+            <?php
+            }
+            ?>
           </div>
           <button
             class="carousel-control-prev"
@@ -343,7 +351,7 @@ include "koneksi.php";
       </div>
     </section>
     <!-- gallery end -->
-     <!-- profile begin -->
+    <!-- profile begin -->
     <section id="profile" class="p-5">
       <div class="container">
         <h1 class="fw-bold display-4 pb-3 text-center">Profil Mahasiswa</h1>
